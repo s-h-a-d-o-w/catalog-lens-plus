@@ -1,24 +1,37 @@
 {
-  "publisher": "antfu",
-  "name": "pnpm-catalog-lens",
-  "displayName": "Catalog Lens",
-  "version": "1.0.2",
+  "publisher": "s-h-a-d-o-w",
+  "name": "pnpm-catalog-lens-plus",
+  "displayName": "Catalog Lens Plus",
+  "version": "1.0.200001",
+  "forkOf": {
+    "name": "pnpm-catalog-lens",
+    "version": "1.0.2"
+  },
   "private": true,
-  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8",
-  "description": "Show inlay version for PNPM/Yarn/Bun catalogs",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "scripts": {
+    "build": "tsdown",
+    "dev": "nr build --watch",
+    "prepare": "nr update",
+    "update": "vscode-ext-gen --output src/generated/meta.ts --scope catalogLens",
+    "lint": "eslint .",
+    "vscode:prepublish": "nr build",
+    "ext:publish": "vsce publish --no-dependencies",
+    "package": "vsce package --no-dependencies",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "release": "bumpp"
+  },
+  "packageManager": "pnpm@12.7.0+sha512.9c56477e360068d6e9dca6a92efb4e46b3dc5a52fcebf3d84d78b9736c0ded589a561621a52f68219a7a39facc63cdc079c3226ef9c9d5f02b79f74e69a807b6",
+  "description": "Show versions inline for PNPM/Yarn/Bun catalogs",
+  "author": "Andreas Opferkuch <andreas.opferkuch@gmail.com>",
   "license": "MIT",
-  "funding": "https://github.com/sponsors/antfu",
-  "homepage": "https://github.com/antfu/vscode-pnpm-catalog-lens#readme",
+  "homepage": "https://github.com/s-h-a-d-o-w/vscode-pnpm-catalog-lens-plus#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antfu/vscode-pnpm-catalog-lens"
+    "url": "https://github.com/s-h-a-d-o-w/vscode-pnpm-catalog-lens-plus"
   },
   "bugs": {
-    "url": "https://github.com/antfu/vscode-pnpm-catalog-lens/issues"
-  },
-  "sponsor": {
-    "url": "https://github.com/sponsors/antfu"
+    "url": "https://github.com/s-h-a-d-o-w/vscode-pnpm-catalog-lens-plus/issues"
   },
   "categories": [
     "Other"
@@ -129,19 +142,6 @@
         }
       }
     }
-  },
-  "scripts": {
-    "build": "tsdown",
-    "dev": "nr build --watch",
-    "prepare": "nr update",
-    "update": "vscode-ext-gen --output src/generated/meta.ts --scope catalogLens",
-    "lint": "eslint .",
-    "vscode:prepublish": "nr build",
-    "ext:publish": "vsce publish --no-dependencies",
-    "package": "vsce package --no-dependencies",
-    "test": "vitest",
-    "typecheck": "tsc --noEmit",
-    "release": "bumpp"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^7.0.0",
