@@ -25,13 +25,13 @@
   "description": "Show versions inline for PNPM/Yarn/Bun catalogs",
   "author": "Andreas Opferkuch <andreas.opferkuch@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/s-h-a-d-o-w/vscode-pnpm-catalog-lens-plus#readme",
+  "homepage": "https://github.com/s-h-a-d-o-w/catalog-lens-plus#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s-h-a-d-o-w/vscode-pnpm-catalog-lens-plus"
+    "url": "https://github.com/s-h-a-d-o-w/catalog-lens-plus"
   },
   "bugs": {
-    "url": "https://github.com/s-h-a-d-o-w/vscode-pnpm-catalog-lens-plus/issues"
+    "url": "https://github.com/s-h-a-d-o-w/catalog-lens-plus/issues"
   },
   "categories": [
     "Other"
