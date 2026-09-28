@@ -1,36 +1,24 @@
 import type { ObjectProperty, StringLiteral } from '@babel/types'
-import type { DecorationOptions, Selection, Terminal } from 'vscode'
-import type { JumpLocationParams, UpgradeVersionParams } from './data'
+import type { DecorationOptions, Selection } from 'vscode'
+import type { JumpLocationParams } from './data'
 
 import type { PackageManager } from './types'
+import type { UpdateProps } from './update'
 import { parseSync } from '@babel/core'
 // @ts-expect-error missing types
 import preset from '@babel/preset-typescript'
 // @ts-expect-error missing types
 import traverse from '@babel/traverse'
 import { computed, defineExtension, executeCommand, shallowRef, toValue as track, useActiveTextEditor, useCommand, useDisposable, useDocumentText, useEditorDecorations, watchEffect } from 'reactive-vscode'
-import { ConfigurationTarget, languages, MarkdownString, Position, Range, Uri, window, workspace, WorkspaceEdit } from 'vscode'
+import { ConfigurationTarget, languages, MarkdownString, Position, Range, Uri, window, workspace } from 'vscode'
 import { config, enabled, hover, namedCatalogsColors, namedCatalogsColorsSalt, namedCatalogsLabel } from './config'
 import { catalogPrefix, PACKAGE_MANAGERS_NAME } from './constants'
 import { WorkspaceManager } from './data'
 import { commands } from './generated/meta'
+import { forceVersionCommand, getForceCommandUri, getUpdateToLatestCommandUri, updateToLatestCommand } from './update'
 import { getCatalogColor, getNodeRange, logger } from './utils'
 
-const versionRangePrefixRe = /^\D*/
 const packageJsonRe = /[\\/]package\.json$/
-
-let terminal: Terminal | undefined
-
-export function getInstallCommand(manager: PackageManager) {
-  switch (manager) {
-    case 'pnpm':
-      return 'pnpm install'
-    case 'yarn':
-      return 'yarn install'
-    case 'bun':
-      return 'bun install'
-  }
-}
 
 const { activate, deactivate } = defineExtension(() => {
   const manager = new WorkspaceManager()
@@ -221,10 +209,10 @@ const { activate, deactivate } = defineExtension(() => {
         manager.getLatestVersion(packageName),
       ])
 
+      const heading = `**${packageManager ? PACKAGE_MANAGERS_NAME[packageManager] : ''} Catalog: \`${catalog}\`**`
       const lines = [
         '---',
-        `**${packageManager ? PACKAGE_MANAGERS_NAME[packageManager] : ''} Catalog: \`${catalog}\`**`,
-        versionPositionCommandUri ? `- Version: [\`${version}\`](${versionPositionCommandUri})` : `- Version: \`${version}\``,
+        versionPositionCommandUri ? `[${heading}](${versionPositionCommandUri})` : heading,
       ]
 
       if (latestVersion) {
@@ -235,24 +223,19 @@ const { activate, deactivate } = defineExtension(() => {
         }
 
         if (!isLatestInstalled && definition && packageManager) {
-          const prefix = version.match(versionRangePrefixRe)?.[0] ?? ''
-          const upgradeArgs = [
-            {
-              cwd: Uri.joinPath(definition.uri, '..').fsPath,
-              manager: packageManager,
-              newVersion: `${prefix}${latestVersion}`,
-              packageName,
-              workspacePath: definition.uri.fsPath,
-              versionRange: {
-                end: { character: definition.range.end.character, line: definition.range.end.line },
-                start: { character: definition.range.start.character, line: definition.range.start.line },
-              },
-            } satisfies UpgradeVersionParams,
-          ]
-          const upgradeCommandUri = Uri.parse(
-            `command:${commands.upgradeVersion}?${encodeURIComponent(JSON.stringify(upgradeArgs))}`,
-          )
-          lines.push(`[Upgrade to latest](${upgradeCommandUri} "Installs ${packageName}@${latestVersion}")`)
+          const updateParams = {
+            cwd: Uri.joinPath(definition.uri, '..').fsPath,
+            definition,
+            manager: packageManager,
+            packageName,
+            workspacePath: definition.uri.fsPath,
+            version,
+            latestVersion,
+          } satisfies UpdateProps
+
+          lines.push(`[Force install ${latestVersion}](${getForceCommandUri(updateParams)} "Installs ${packageName}@${latestVersion}")`)
+
+          lines.push(`[Update to latest](${getUpdateToLatestCommandUri(updateParams)} "Update to the latest version that ${PACKAGE_MANAGERS_NAME[packageManager]} allows")`)
         }
       }
       else if (installedVersion) {
@@ -302,28 +285,11 @@ const { activate, deactivate } = defineExtension(() => {
       'goto',
     )
   }
-  const upgradeVersionCommand = async ({ cwd, manager: packageManager, newVersion, workspacePath, versionRange }: UpgradeVersionParams) => {
-    const uri = Uri.file(workspacePath)
-    const document = await workspace.openTextDocument(uri)
-    const range = new Range(
-      new Position(versionRange.start.line, versionRange.start.character),
-      new Position(versionRange.end.line, versionRange.end.character),
-    )
-    const edit = new WorkspaceEdit()
-    edit.replace(uri, range, newVersion)
-    await workspace.applyEdit(edit)
-    await document.save()
-
-    // We use a terminal because `install` might trigger a prompt or show feedback, like new scripts to approve
-    const command = getInstallCommand(packageManager)
-    terminal ??= window.createTerminal({ name: 'Catalog Lens', cwd })
-    terminal.show()
-    terminal.sendText(command)
-  }
 
   useCommand(commands.toggle, toggleCommand)
   useCommand(commands.gotoDefinition, gotoDefinitionCommand)
-  useCommand(commands.upgradeVersion, upgradeVersionCommand)
+  useCommand(commands.forceVersion, forceVersionCommand)
+  useCommand(commands.updateToLatest, updateToLatestCommand)
 
   // Legacy commands for backward compatibility - will be removed in future versions
   useCommand(commands.pnpmCatalogLensToggle, toggleCommand)

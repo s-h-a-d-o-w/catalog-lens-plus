@@ -42,6 +42,12 @@ export interface UpgradeVersionParams {
   }
 }
 
+export interface UpdateToLatestParams {
+  cwd: string
+  manager: PackageManager
+  packageName: string
+}
+
 export interface WorkspaceInfo {
   path: string
   manager: PackageManager

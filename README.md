@@ -4,8 +4,7 @@
 
 - Install the latest version of a dependency with one click from the package.json that you are looking at.
 
-![Install Screenshot](install_screenshot.png "Install Screenshot")
-
+![Install Screenshot](install_screenshot.png 'Install Screenshot')
 
 <p align="center">
 <img src="https://github.com/antfu/vscode-pnpm-catalog-lens/blob/main/res/icon.png?raw=true" height="150">

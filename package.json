@@ -75,14 +75,22 @@
         "command": "pnpmCatalogLens.gotoDefinition"
       },
       {
-        "title": "Upgrade Version",
-        "command": "catalogLens.upgradeVersion"
+        "title": "Force Version",
+        "command": "catalogLens.forceVersion"
+      },
+      {
+        "title": "Update to Latest",
+        "command": "catalogLens.updateToLatest"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "catalogLens.upgradeVersion",
+          "command": "catalogLens.forceVersion",
+          "when": "false"
+        },
+        {
+          "command": "catalogLens.updateToLatest",
           "when": "false"
         }
       ]
@@ -153,7 +161,7 @@
     "@reactive-vscode/vueuse": "^0.4.1",
     "@types/babel__core": "^7.20.5",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^25.0.7",
+    "@types/node": "^26.6.3",
     "@types/vscode": "1.125.0",
     "@vscode/vsce": "^3.7.1",
     "bumpp": "^10.4.0",
