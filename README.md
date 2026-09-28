@@ -2,7 +2,7 @@
 
 ## Differences
 
-- Install the latest version of a dependency with one click from the package.json that you are looking at.
+- Update a dependency with one click from the package.json that you are looking at.
 
 ![Install Screenshot](install_screenshot.png 'Install Screenshot')
 
