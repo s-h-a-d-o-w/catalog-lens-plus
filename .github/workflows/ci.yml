@@ -3,11 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - fork
 
   pull_request:
     branches:
-      - main
+      - fork
 
 jobs:
   lint:
@@ -22,10 +22,10 @@ jobs:
           cache: true
 
       - name: Lint
-        run: nr lint
+        run: pnpm lint
 
       - name: Typecheck
-        run: nr typecheck
+        run: pnpm typecheck
 
   test:
     runs-on: ${{ matrix.os }}
@@ -46,7 +46,7 @@ jobs:
           cache: true
 
       - name: Build
-        run: nr build
+        run: pnpm build
 
       - name: Test
-        run: nr test
+        run: pnpm test
