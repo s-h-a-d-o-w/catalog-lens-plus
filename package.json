@@ -41,6 +41,7 @@
   "files": [
     "LICENSE.md",
     "dist/*",
+    "install_screenshot.png",
     "res/*"
   ],
   "engines": {
