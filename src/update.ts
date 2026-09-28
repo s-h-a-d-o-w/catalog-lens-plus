@@ -27,6 +27,7 @@ interface ForceVersionParams {
 }
 
 type UpdateToLatestParams = Pick<ForceVersionParams, 'cwd' | 'manager' | 'packageName'>
+type UpdateParams = Pick<ForceVersionParams, 'cwd' | 'manager' | 'packageName'>
 
 // We use a terminal because `install` might trigger a prompt or show feedback, like new scripts to approve
 let terminal: Terminal | undefined
@@ -51,6 +52,18 @@ function getUpdateToLatestCommand(manager: PackageManager, packageName: string) 
       return `yarn up ${packageName}`
     case 'bun':
       return `bun update --latest ${packageName}`
+  }
+}
+
+function getUpdateCommand(manager: PackageManager, packageName: string) {
+  switch (manager) {
+    case 'pnpm':
+      return `pnpm update ${packageName}`
+    // `--recursive` re-resolves within the existing range without touching manifests, unlike plain `yarn up`
+    case 'yarn':
+      return `yarn up --recursive ${packageName}`
+    case 'bun':
+      return `bun update ${packageName}`
   }
 }
 
@@ -86,6 +99,19 @@ export function getUpdateToLatestCommandUri({ cwd, manager, packageName }: Updat
   )
 }
 
+export function getUpdateCommandUri({ cwd, manager, packageName }: UpdateProps) {
+  const updateArgs = [
+    {
+      cwd,
+      manager,
+      packageName,
+    } satisfies UpdateParams,
+  ]
+  return Uri.parse(
+    `command:${commands.update}?${encodeURIComponent(JSON.stringify(updateArgs))}`,
+  )
+}
+
 export async function forceVersionCommand({ cwd, manager: packageManager, newVersion, workspacePath, versionRange }: UpgradeVersionParams) {
   const uri = Uri.file(workspacePath)
   const document = await workspace.openTextDocument(uri)
@@ -106,6 +132,13 @@ export async function forceVersionCommand({ cwd, manager: packageManager, newVer
 
 export function updateToLatestCommand({ cwd, manager: packageManager, packageName }: UpdateToLatestParams) {
   const command = getUpdateToLatestCommand(packageManager, packageName)
+  terminal ??= window.createTerminal({ name: 'Catalog Lens', cwd })
+  terminal.show()
+  terminal.sendText(command)
+}
+
+export function updateCommand({ cwd, manager: packageManager, packageName }: UpdateParams) {
+  const command = getUpdateCommand(packageManager, packageName)
   terminal ??= window.createTerminal({ name: 'Catalog Lens', cwd })
   terminal.show()
   terminal.sendText(command)

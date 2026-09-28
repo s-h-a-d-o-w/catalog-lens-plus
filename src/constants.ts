@@ -5,9 +5,9 @@ export const catalogPrefix = 'catalog:'
 export const PACKAGE_MANAGERS = ['pnpm', 'yarn', 'bun'] as const
 
 export const PACKAGE_MANAGERS_NAME: Record<PackageManager, string> = {
-  pnpm: 'PNPM',
-  yarn: 'Yarn',
-  bun: 'Bun',
+  pnpm: 'pnpm',
+  yarn: 'yarn',
+  bun: 'bun',
 } as const
 
 export const WORKSPACE_FILES: Record<PackageManager, string> = {

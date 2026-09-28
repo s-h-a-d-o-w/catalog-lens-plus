@@ -2,7 +2,6 @@ import type { ObjectProperty, StringLiteral } from '@babel/types'
 import type { DecorationOptions, Selection } from 'vscode'
 import type { JumpLocationParams } from './data'
 
-import type { PackageManager } from './types'
 import type { UpdateProps } from './update'
 import { parseSync } from '@babel/core'
 // @ts-expect-error missing types
@@ -15,7 +14,7 @@ import { config, enabled, hover, namedCatalogsColors, namedCatalogsColorsSalt, n
 import { catalogPrefix, PACKAGE_MANAGERS_NAME } from './constants'
 import { WorkspaceManager } from './data'
 import { commands } from './generated/meta'
-import { forceVersionCommand, getForceCommandUri, getUpdateToLatestCommandUri, updateToLatestCommand } from './update'
+import { forceVersionCommand, getForceCommandUri, getUpdateCommandUri, getUpdateToLatestCommandUri, updateCommand, updateToLatestCommand } from './update'
 import { getCatalogColor, getNodeRange, logger } from './utils'
 
 const packageJsonRe = /[\\/]package\.json$/
@@ -209,17 +208,16 @@ const { activate, deactivate } = defineExtension(() => {
         manager.getLatestVersion(packageName),
       ])
 
-      const heading = `**${packageManager ? PACKAGE_MANAGERS_NAME[packageManager] : ''} Catalog: \`${catalog}\`**`
+      const heading = `**${packageManager ? PACKAGE_MANAGERS_NAME[packageManager] : ''} catalog: \`${catalog}\`**`
       const lines = [
-        '---',
-        versionPositionCommandUri ? `[${heading}](${versionPositionCommandUri})` : heading,
+        versionPositionCommandUri ? `[${heading}](${versionPositionCommandUri})  ` : `${heading}  `,
       ]
 
       if (latestVersion) {
         const isLatestInstalled = latestVersion === installedVersion
 
         if (installedVersion) {
-          lines.push(`- Installed: \`${isLatestInstalled ? 'latest' : installedVersion}\``)
+          lines.push(`Installed: \`${isLatestInstalled ? 'latest' : installedVersion}\`  `)
         }
 
         if (!isLatestInstalled && definition && packageManager) {
@@ -233,9 +231,10 @@ const { activate, deactivate } = defineExtension(() => {
             latestVersion,
           } satisfies UpdateProps
 
-          lines.push(`[Force install ${latestVersion}](${getForceCommandUri(updateParams)} "Installs ${packageName}@${latestVersion}")`)
-
-          lines.push(`[Update to latest](${getUpdateToLatestCommandUri(updateParams)} "Update to the latest version that ${PACKAGE_MANAGERS_NAME[packageManager]} allows")`)
+          lines.push(`
+[Update](${getUpdateCommandUri(updateParams)} "Update to the latest version allowed by the semver range") |
+[Update to latest](${getUpdateToLatestCommandUri(updateParams)} "Update to the latest version that ${PACKAGE_MANAGERS_NAME[packageManager]} allows") |
+[Force install ${latestVersion}](${getForceCommandUri(updateParams)} "Install ${latestVersion}, regardless of release age or semver")  `)
         }
       }
       else if (installedVersion) {
@@ -290,6 +289,7 @@ const { activate, deactivate } = defineExtension(() => {
   useCommand(commands.gotoDefinition, gotoDefinitionCommand)
   useCommand(commands.forceVersion, forceVersionCommand)
   useCommand(commands.updateToLatest, updateToLatestCommand)
+  useCommand(commands.update, updateCommand)
 
   // Legacy commands for backward compatibility - will be removed in future versions
   useCommand(commands.pnpmCatalogLensToggle, toggleCommand)

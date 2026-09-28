@@ -81,6 +81,10 @@
       {
         "title": "Update to Latest",
         "command": "catalogLens.updateToLatest"
+      },
+      {
+        "title": "Update",
+        "command": "catalogLens.update"
       }
     ],
     "menus": {
@@ -91,6 +95,10 @@
         },
         {
           "command": "catalogLens.updateToLatest",
+          "when": "false"
+        },
+        {
+          "command": "catalogLens.update",
           "when": "false"
         }
       ]
