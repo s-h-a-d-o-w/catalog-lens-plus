@@ -2,7 +2,7 @@
   "publisher": "s-h-a-d-o-w",
   "name": "pnpm-catalog-lens-plus",
   "displayName": "Catalog Lens+",
-  "version": "1.0.200007",
+  "version": "1.0.200008",
   "forkOf": {
     "name": "pnpm-catalog-lens",
     "version": "1.0.2"
