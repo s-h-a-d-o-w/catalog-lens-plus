@@ -1,4 +1,4 @@
-# Catalog Lens Plus (fork of Catalog Lens)
+# Catalog Lens+ (fork of Catalog Lens)
 
 ## Differences
 
