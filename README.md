@@ -13,11 +13,6 @@
 <h1 align="center">Catalog Lens <sup>VS Code</sup></h1>
 
 <p align="center">
-<a href="https://marketplace.visualstudio.com/items?itemName=antfu.pnpm-catalog-lens" target="__blank"><img src="https://img.shields.io/visual-studio-marketplace/v/antfu.pnpm-catalog-lens.svg?color=eee&amp;label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="Visual Studio Marketplace Version" /></a>
-<a href="https://kermanx.github.io/reactive-vscode/" target="__blank"><img src="https://img.shields.io/badge/made_with-reactive--vscode-%23eee?style=flat"  alt="Made with reactive-vscode" /></a>
-</p>
-
-<p align="center">
 Show versions inline for <a href="https://pnpm.io/catalogs" target="_blank">pnpm</a> · <a href="https://yarnpkg.com/features/catalogs" target="_blank">yarn</a> · <a href="https://bun.sh/docs/install/catalogs" target="_blank">bun</a> <code>catalog:</code> fields.<br>
 </p>
 
@@ -51,18 +46,6 @@ Show versions inline for <a href="https://pnpm.io/catalogs" target="_blank">pnpm
 
 - [catalog-lens.nvim](https://github.com/Daydreamer-riri/catalog-lens.nvim) - Neovim plugin with the same features
 
-## Sponsors
-
-<p align="center">
-  <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
-    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.png'/>
-  </a>
-</p>
-
 ## Credits
 
 Logo is modified from [Catppuccin Icons](https://github.com/catppuccin/vscode-icons) ([`pnpm.svg`](https://github.com/catppuccin/vscode-icons/blob/main/icons/css-variables/pnpm.svg)), licensed under [MIT](https://github.com/catppuccin/vscode-icons/blob/main/LICENSE).
-
-## License
-
-[MIT](./LICENSE) License © 2022 [Anthony Fu](https://github.com/antfu)
