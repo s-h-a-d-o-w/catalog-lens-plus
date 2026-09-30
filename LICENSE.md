@@ -1,5 +1,6 @@
 MIT License
 
+Copyright (c) 2022 Anthony Fu <https://github.com/antfu>
 Copyright (c) 2026 Andreas Opferkuch <https://github.com/s-h-a-d-o-w>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
