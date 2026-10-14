@@ -46,24 +46,26 @@ function getInstallCommand(manager: PackageManager) {
 
 function getUpdateToLatestCommand(manager: PackageManager, packageName: string) {
   switch (manager) {
+    // `--recursive` is needed to reach dependencies declared in workspace packages rather than the root
     case 'pnpm':
-      return `pnpm update --latest ${packageName}`
+      return `pnpm update --recursive --latest ${packageName}`
+    // `yarn up` is already project-wide and covers every workspace
     case 'yarn':
       return `yarn up ${packageName}`
     case 'bun':
-      return `bun update --latest ${packageName}`
+      return `bun update --recursive --latest ${packageName}`
   }
 }
 
 function getUpdateCommand(manager: PackageManager, packageName: string) {
   switch (manager) {
     case 'pnpm':
-      return `pnpm update ${packageName}`
+      return `pnpm update --recursive ${packageName}`
     // `--recursive` re-resolves within the existing range without touching manifests, unlike plain `yarn up`
     case 'yarn':
       return `yarn up --recursive ${packageName}`
     case 'bun':
-      return `bun update ${packageName}`
+      return `bun update --recursive ${packageName}`
   }
 }
 
